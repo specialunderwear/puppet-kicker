@@ -1,6 +1,8 @@
 puppet-kicker: cross server puppet notifications
 ================================================
 
+puppet-kicker requires exported resources to be enabled!
+
 Puppet-kicker runs ``puppet kick`` on dependent servers. Suppose we've got a
 loadbalancer and some nodes that need to be balanced. With puppet-kicker that
 pattern looks like this;
