@@ -5,10 +5,8 @@ Puppet-kicker runs ``puppet kick`` on dependent servers. Suppose we've got a
 loadbalancer and some nodes that need to be balanced. With puppet-kicker that
 pattern looks like this;
 
-on the node:
+on the node::
 
-.. code-block:: ruby
-    
     # export the server info as a resource
     # 'node' is the server's *role*
     @@server {"node":
@@ -20,10 +18,8 @@ on the node:
     # kick haproxy so it rebuilds it config.
     notify {"kick -> haproxy":}
 
-on the server:
+on the server::
 
-.. code-block:: ruby
-    
     # collect all the servers with *role* `node`.
     $nodes = servers_with_role('node')
     
@@ -51,9 +47,7 @@ on the server:
         ipaddress => $ipaddress,
     }
 
-and the configfile would look like this:
-
-.. code-block:: erb
+and the configfile would look like this::
     
     global 
           maxconn 4096 
@@ -94,9 +88,7 @@ Because we use this with cloudstack, we added
 script so we can make the role available on each server as a puppet fact.
 doing this allows us to use that fact as a node classifier instead of an
 external node classifier. In practice that means we actually export our
-``server`` resources like this:
-
-.. code-block:: ruby
+``server`` resources like this::
 
     @@server {$role:
         fqdn => $fqdn,
@@ -104,9 +96,7 @@ external node classifier. In practice that means we actually export our
         ipaddress => $ipaddress,
     }
 
-and in nodes.pp we use the role to classify the node like this:
-
-.. code-block:: ruby
+and in nodes.pp we use the role to classify the node like this::
 
     case $role {
         'haproxy': {
