@@ -107,3 +107,19 @@ and in nodes.pp we use the role to classify the node like this::
             include node
         }
     }
+
+caveats
+-------
+
+There is no cycle detection built into the kicker. So you've got to be careful
+not to introduce cylclic kicks.
+
+in node.pp::
+
+    notify {"kick -> haproxy":}
+
+in haproxy.pp::
+
+    notify {"kick -> node":}
+
+That will keep your puppet agents running forever.
