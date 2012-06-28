@@ -18,7 +18,7 @@ begin
       raise Puppet::ParseError, ("servers_with_role(): wrong number of arguments (#{args.length}; must be >= 1)") if args.length < 1
 
       begin
-        return Puppet::Rails::Resource.where(:title => args, :restype => 'Server').all
+        return Puppet::Rails::Resource.order('created_at').where(:title => args, :restype => 'Server').all
       rescue
         log "an error occurred while querying for nodes"
         []
