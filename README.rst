@@ -114,7 +114,7 @@ caveats
 -------
 
 There is no cycle detection built into the kicker. So you've got to be careful
-not to introduce cylclic kicks.
+not to introduce cyclic kicks.
 
 in node.pp::
 
@@ -125,3 +125,5 @@ in haproxy.pp::
     notify {"kick -> node":}
 
 That will keep your puppet agents running forever.
+
+We need cycle detection though, so stay tuned for an update.
