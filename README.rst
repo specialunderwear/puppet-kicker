@@ -70,7 +70,7 @@ and the configfile would look like this::
           mode tcp 
           balance roundrobin
           <% nodes.each do node %>
-          server <% = node.hostname -%> <% node.ipaddress -%>:8080 check inter 2000
+          server <% = node['hostname'] -%> <% node['ipaddress'] -%>:8080 check inter 2000
           <% end -%>
 
 So puppet kicker gives you:
