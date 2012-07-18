@@ -9,20 +9,17 @@ begin
     :doc => "Return all server objects with a certain role:
   
     servers_with_role('frontend', 'production)
-    " ) do |args|
+    " ) do |roles|
+      Puppet::Parser::Functions.autoloader.loadall
       
-      log "fetching servers with role #{args}"
+      log "fetching servers with role #{roles.join(' ')}"
       
-      environment ||= lookupvar("::environment")
-
-      raise Puppet::ParseError, ("servers_with_role(): wrong number of arguments (#{args.length}; must be >= 1)") if args.length < 1
-
-      begin
-        return Puppet::Rails::Resource.order('created_at').where(:title => args, :restype => 'Server').all
-      rescue
-        log "an error occurred while querying for nodes"
-        []
+      if roles.length == 1
+          return function_servers_with_facts(["role=#{roles}"])
+      else
+          return function_servers_with_facts(["role=/^#{roles.join('$|^')}$/"])
       end
+      
     end
   end
   
