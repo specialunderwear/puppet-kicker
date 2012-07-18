@@ -38,8 +38,8 @@ begin
         end
 
         return results
-      rescue
-        log "servers_with_facts(): an error occurred while querying for nodes"
+      rescue Exception => e 
+        log "servers_with_facts(): an error occurred while querying for nodes #{e.message}"
         []
       end
     end
