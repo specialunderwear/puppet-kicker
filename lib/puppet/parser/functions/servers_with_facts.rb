@@ -23,14 +23,22 @@ begin
 
       begin
         config = MCollective::Config.instance
-        config.loadconfig("/etc/mcollective/client.cfg") unless config.configured
+        config.loadconfig(MCollective::Util.config_file_for_user) unless config.configured
+        options = {
+          :disctimeout => 2,
+          :timeout => 5,
+          :verbose => false,
+          :filter => MCollective::Util.empty_filter,
+          :config => "/Users/ebone/.mcollective",
+          :progress_bar => false,
+          :mcollective_limit_targets => false,
+          #        :batch_size => nil,
+          #        :batch_sleep_time => 1,
+        }
 
-        filter = MCollective::Util.empty_filter
-        filter['fact'] = facts.map {|x| MCollective::Util.parse_fact_string(x)}
-        filter['agent'] << 'rpcutil'
-
-        rpcclient = MCollective::RPC::Client.new('rpcutil')
-        rpcclient.filter = filter
+        rpcclient = MCollective::RPC::Client.new('rpcutil', :options => options)
+        rpcclient.filter['fact'] = facts.map {|x| MCollective::Util.parse_fact_string(x)}
+        rpcclient.filter['agent'] << 'rpcutil'
 
         results = []
         rpcclient.inventory() do |result|
