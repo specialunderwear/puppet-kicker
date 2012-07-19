@@ -2,6 +2,8 @@ require 'puppet/rails'
 require 'puppet/util/log'
 require 'puppet/reports'
 
+require 'kicker/utils'
+
 # Reporting class which will trigger puppet runs on dependent servers.
 # any server can trigger a run of another server by including:
 #
@@ -17,7 +19,7 @@ Puppet::Reports.register_report(:kick) do
 
   def process
     log "Kicker post processing for #{self.host}"
-
+    
     # find all statussen of type Notify which matches the "kick ->" pattern
     changes = self.resource_statuses.find_all do |status|
       name, status = status
@@ -29,19 +31,9 @@ Puppet::Reports.register_report(:kick) do
     changes.each do |name, status|
       log "Status changed: #{name} #{status} #{status.title} #{status.resource_type}"
       log "kick role name: #{status.title[8..-1]}"
-      
-      # query for the servers with the specified role.
-      facts = Puppet::Rails::FactValue.find_by_sql("
-      SELECT
-           DISTINCT fv.host_id from fact_values fv, fact_names fn
-           WHERE fn.name = 'role' and fv.value = '#{status.title[8..-1]}'"
-      )
-      
-      # run puppet kick to trigger a puppet run for each server.
-      facts.each do |fact|
-        log "kicking #{fact.host.name}"
-        %x{puppet kick #{fact.host.name}}
-      end
+      puppetd = Kicker::Utils.get_rpc_client('puppetd', ["role=#{status.title[8..-1]}"])
+      puppetd.runonce()
+      #{}%x{mco puppetd runonce -Frole=#{status.title[8..-1]}}
     end
   end
   
