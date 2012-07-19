@@ -20,7 +20,7 @@ Puppet::Reports.register_report(:kick) do
   def process
     log "Kicker post processing for #{self.host}"
     
-    # find all statussen of type Notify which matches the "kick ->" pattern
+    # find all statusses of type Notify which matches the "kick ->" pattern
     changes = self.resource_statuses.find_all do |status|
       name, status = status
       status.changed? and status.resource_type == "Notify" and status.title =~ /^kick ->/
@@ -33,7 +33,6 @@ Puppet::Reports.register_report(:kick) do
       log "kick role name: #{status.title[8..-1]}"
       puppetd = Kicker::Utils.get_rpc_client('puppetd', ["role=#{status.title[8..-1]}"])
       puppetd.runonce()
-      #{}%x{mco puppetd runonce -Frole=#{status.title[8..-1]}}
     end
   end
   
