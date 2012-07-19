@@ -3,7 +3,7 @@ begin
   require 'puppet/rails/resource'
   require 'puppet/util/log'
 
-  require "mcollective"
+  require "kicker/utils"
   
   module Puppet::Parser::Functions
     newfunction(:servers_with_facts,
@@ -20,23 +20,7 @@ begin
       raise Puppet::ParseError, ("servers_with_facts(): wrong number of arguments (#{facts.length}; must be >= 1)") if facts.length < 1
 
       begin
-        config = MCollective::Config.instance
-        config.loadconfig(MCollective::Util.config_file_for_user) unless config.configured
-        options = {
-          :disctimeout => 2,
-          :timeout => 5,
-          :verbose => false,
-          :filter => MCollective::Util.empty_filter,
-          :config => "/Users/ebone/.mcollective",
-          :progress_bar => false,
-          :mcollective_limit_targets => false,
-          #        :batch_size => nil,
-          #        :batch_sleep_time => 1,
-        }
-
-        rpcclient = MCollective::RPC::Client.new('rpcutil', :options => options)
-        rpcclient.filter['fact'] = facts.map {|x| MCollective::Util.parse_fact_string(x)}
-        rpcclient.filter['agent'] << 'rpcutil'
+        rpcclient = Kicker::Utils.get_rpc_client('rpcutil', facts)
 
         results = []
         rpcclient.inventory() do |result|
