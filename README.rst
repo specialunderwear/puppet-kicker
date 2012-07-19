@@ -1,26 +1,30 @@
 puppet-kicker: cross server puppet notifications
 ================================================
 
-puppet-kicker requires exported resources to be enabled!
+puppet-kicker requires
+`mcollective <http://marionette-collective.org/>`_
+with the
+`puppetd plugin <http://projects.puppetlabs.com/projects/mcollective-plugins/wiki/AgentPuppetd>`_
+for querying and notifying servers.
 
-Puppet-kicker runs ``puppet kick`` on dependent servers. Suppose we've got a
+*Puppet-kicker triggers runs of* ``puppet agent`` *on dependent servers.*
+
+Suppose we've got a
 loadbalancer and some nodes that need to be balanced. With puppet-kicker that
 pattern looks like this;
 
-on the node::
+On the node, you've got to make sure a fact is available with the name ``role``.
+See :ref:`cloudstack` for an example of how to achive this for
+`cloudstack <http://www.cloudstack.org/>`_. After that all it takes is
 
-    # export the server info as a resource
-    # 'node' is the server's *role*
-    @@server {"node":
-        fqdn => $fqdn,
-        hostname => $hostname,
-        ipaddress => $ipaddress,
-    }
-    
+::
+
     # kick haproxy so it rebuilds it config.
     notify {"kick -> haproxy":}
 
-on the server::
+on the server the ``role`` fact should also be defined and set to 'haproxy'
+
+::
 
     # collect all the servers with *role* `node`.
     $nodes = servers_with_role('node')
@@ -42,14 +46,9 @@ on the server::
         ensure => running,
     }
     
-    # export the server so we can find it for kicking.
-    @@server {"haproxy":
-        fqdn => $fqdn,
-        hostname => $hostname,
-        ipaddress => $ipaddress,
-    }
+and the configfile would look like this
 
-and the configfile would look like this::
+::
     
     global 
           maxconn 4096 
@@ -73,32 +72,22 @@ and the configfile would look like this::
           server <% = node['hostname'] -%> <% node['ipaddress'] -%>:8080 check inter 2000
           <% end -%>
 
-So puppet kicker gives you:
-
-a resource type called ``server`` that should be exported for servers you want
-to collect with ``servers_with_role``.
-
 To enable the kicker, you should add the ``kick`` to your reports in puppet.conf::
 
     reports=log, kick
+
+.. _cloudstack:
 
 cloudstack
 ----------
 
 Because we use this with cloudstack, we added
 `Jason Hancock <http://geek.jasonhancock.com>`_ his userdata-to-puppetfact
-script so we can make the role available on each server as a puppet fact.
+script so we can make the ``role`` userdata available on each server as a puppet fact.
 doing this allows us to use that fact as a node classifier instead of an
-external node classifier. In practice that means we actually export our
-``server`` resources like this::
+external node classifier.
 
-    @@server {$role:
-        fqdn => $fqdn,
-        hostname => $hostname,
-        ipaddress => $ipaddress,
-    }
-
-and in nodes.pp we use the role to classify the node like this::
+In nodes.pp we use the role to classify the node like this::
 
     case $role {
         'haproxy': {
