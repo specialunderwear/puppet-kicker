@@ -14,9 +14,9 @@ begin
     servers_with_facts('hostname=/^new$|^old$/') // returns servers with hostname either new or old
     servers_with_facts('uptime>10', 'hostname=/lala/') // returns servers with uptime over 10 and hostname matches lala
     " ) do |facts|
-      
+
       log "fetching servers with facts #{facts.join(' ')}"
-      
+
       environment ||= lookupvar("::environment")
 
       raise Puppet::ParseError, ("servers_with_facts(): wrong number of arguments (#{facts.length}; must be >= 1)") if facts.length < 1
@@ -43,11 +43,12 @@ begin
         results = []
         rpcclient.inventory() do |result|
             results << result[:body][:data][:facts]
+            log "found server #{result[:body][:data][:facts]['fqdn']}"
         end
 
         return results
       rescue Exception => e 
-        log "servers_with_facts(): an error occurred while querying for nodes #{e.message}"
+        log "an error occurred while querying for nodes #{e.message}"
         []
       end
     end
@@ -58,7 +59,7 @@ begin
     Puppet::Util::Log.create(
       :level   => :info,
       :message => msg,
-      :source  => 'servers_with_role'
+      :source  => 'servers_with_facts'
     )  
   end
   
