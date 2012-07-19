@@ -17,8 +17,6 @@ begin
 
       log "fetching servers with facts #{facts.join(' ')}"
 
-      environment ||= lookupvar("::environment")
-
       raise Puppet::ParseError, ("servers_with_facts(): wrong number of arguments (#{facts.length}; must be >= 1)") if facts.length < 1
 
       begin
