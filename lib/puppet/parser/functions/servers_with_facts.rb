@@ -15,7 +15,7 @@ begin
     servers_with_facts('uptime>10', 'hostname=/lala/') // returns servers with uptime over 10 and hostname matches lala
     " ) do |facts|
 
-      log "fetching servers with facts #{facts.join(' ')}"
+      log "fetching servers with facts #{facts}"
 
       raise Puppet::ParseError, ("servers_with_facts(): wrong number of arguments (#{facts.length}; must be >= 1)") if facts.length < 1
 

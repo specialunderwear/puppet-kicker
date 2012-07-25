@@ -12,12 +12,12 @@ begin
     " ) do |roles|
       Puppet::Parser::Functions.autoloader.loadall
       
-      log "fetching servers with role #{roles.join(' ')}"
+      log "fetching servers with role #{roles}"
       
-      if roles.length == 1
-          return function_servers_with_facts(["role=#{roles}"])
-      else
+      if roles.kind_of?(Array)
           return function_servers_with_facts(["role=/^#{roles.join('$|^')}$/"])
+      else
+          return function_servers_with_facts(["role=#{roles}"])
       end
       
     end
