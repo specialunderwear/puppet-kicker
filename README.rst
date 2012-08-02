@@ -78,8 +78,6 @@ To enable the kicker, you should add the ``kick`` to your reports in puppet.conf
 
     reports=log, kick
 
-.. _cloudstack:
-
 Available functions
 -------------------
 
@@ -93,7 +91,9 @@ facts.
     servers_with_facts('hostname=/^new$|^old$/') // returns servers with hostname either new or old
     servers_with_facts('uptime>10', 'hostname=/lala/') // returns servers with uptime over 10 and hostname matches lala
 
-cloudstack
+.. _cloudstack:
+
+Cloudstack
 ----------
 
 Because we use this with cloudstack, we added
