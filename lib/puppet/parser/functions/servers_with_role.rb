@@ -31,6 +31,6 @@ begin
     )  
   end
   
-rescue NameError
+rescue NameError, LoadError
   # the puppet clients don't have any activerecord. see http://projects.puppetlabs.com/issues/12594
 end

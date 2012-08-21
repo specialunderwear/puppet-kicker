@@ -1,6 +1,6 @@
 begin
     require 'mcollective'
-    
+
     module Kicker
         module Utils
             def get_rpc_client(agent, facts)
@@ -27,6 +27,19 @@ begin
             module_function :get_rpc_client
         end    
     end
-rescue NameError
+rescue NameError, LoadError
     # mcollective could be not installed yet. see http://projects.puppetlabs.com/issues/12594
+    # in that case return a replacement that always returns an empty array
+    module Kicker
+        class Utils
+            def self.get_rpc_client(agent, facts)
+                return self.new
+            end
+
+            def method_missing(m, *args, &block)
+                return []
+            end
+        end
+    end
+    
 end
