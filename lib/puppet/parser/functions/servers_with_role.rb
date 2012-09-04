@@ -1,6 +1,4 @@
 begin
-  require 'puppet/rails'
-  require 'puppet/rails/resource'
   require 'puppet/util/log'
 
   module Puppet::Parser::Functions

@@ -1,6 +1,4 @@
 begin
-  require 'puppet/rails'
-  require 'puppet/rails/resource'
   require 'puppet/util/log'
 
   require "kicker/utils"

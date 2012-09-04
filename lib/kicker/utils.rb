@@ -14,6 +14,7 @@ begin
                     :config => "/etc/mcollective/client.cfg",
                     :progress_bar => false,
                     :mcollective_limit_targets => false,
+                    :collective => facts.fetch('environment', 'mcollective')
                     #        :batch_size => nil,
                     #        :batch_sleep_time => 1,
                 }
