@@ -3,7 +3,7 @@ begin
 
     module Kicker
         module Utils
-            def get_rpc_client(agent, facts)
+            def get_rpc_client(agent, facts, environment)
                 config = MCollective::Config.instance
                 config.loadconfig(MCollective::Util.config_file_for_user) unless config.configured
                 options = {
@@ -14,7 +14,7 @@ begin
                     :config => "/etc/mcollective/client.cfg",
                     :progress_bar => false,
                     :mcollective_limit_targets => false,
-                    :collective => facts.fetch('environment', 'mcollective')
+                    :collective => environment
                     #        :batch_size => nil,
                     #        :batch_sleep_time => 1,
                 }

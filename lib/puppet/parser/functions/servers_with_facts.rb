@@ -18,7 +18,7 @@ begin
       raise Puppet::ParseError, ("servers_with_facts(): wrong number of arguments (#{facts.length}; must be >= 1)") if facts.length < 1
 
       begin
-        rpcclient = Kicker::Utils.get_rpc_client('rpcutil', facts)
+        rpcclient = Kicker::Utils.get_rpc_client('rpcutil', facts, lookupvar("::environment"))
 
         results = []
         rpcclient.inventory() do |result|
