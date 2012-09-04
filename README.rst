@@ -114,6 +114,21 @@ In nodes.pp we use the role to classify the node like this::
         }
     }
 
+Environments
+------------
+
+Puppet-kicker will try to find the environment amongst the facts of your server.
+If it can be found, mcollective will be restricted to the collective with the
+same name. If it can not be found, it will just use `mcollective` as the 
+environment.
+
+This means you should make your mcollective agents part of a collective with
+the same name as the puppet environment::
+
+  main_collective = <%= @environment -%>
+  collectives = mcollective,<%= @environment -%>
+
+
 caveats
 -------
 
