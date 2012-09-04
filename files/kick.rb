@@ -31,7 +31,7 @@ Puppet::Reports.register_report(:kick) do
     changes.each do |name, status|
       log "Status changed: #{name} #{status} #{status.title} #{status.resource_type}"
       log "kick role name: #{status.title[8..-1]}"
-      puppetd = Kicker::Utils.get_rpc_client('puppetd', ["role=#{status.title[8..-1]}"])
+      puppetd = Kicker::Utils.get_rpc_client('puppetd', ["role=#{status.title[8..-1]}"], self.environment)
       puppetd.runonce()
     end
   end
