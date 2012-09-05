@@ -81,7 +81,7 @@ To enable the kicker, you should add the ``kick`` to your reports in puppet.conf
 Available functions
 -------------------
 
-These functions alwats return a list of dictionaries containing all the server
+These functions always return a list of dictionaries containing all the server
 facts.
 
 - servers_with_role: Return all server objects with a certain role:
