@@ -88,7 +88,9 @@ facts.
     servers_with_role('frontend', 'production)
 - servers_with_facts:     Return all server objects with all the facts specified.
     servers_with_facts('hostname=new') // returns servers with hostname new
+
     servers_with_facts('hostname=/^new$|^old$/') // returns servers with hostname either new or old
+
     servers_with_facts('uptime>10', 'hostname=/lala/') // returns servers with uptime over 10 and hostname matches lala
 
 .. _cloudstack:
