@@ -3,7 +3,15 @@
 # looks for reporting scripts.
 
 class kicker {
-    file {"/usr/lib/ruby/1.8/puppet/reports/kick.rb":
+    case $::operatingsystem {
+        'Debian', 'Ubuntu': {
+            $ruby_lib_path = "/usr/lib/ruby/1.8"
+        }
+        'CentOS','Fedora': {
+            $ruby_lib_path = "/usr/lib/ruby/site_ruby/1.8"
+        }
+    }
+    file {"$ruby_lib_path/puppet/reports/kick.rb":
         mode     => '0444',
         owner    => 'puppet',
         group    => 'puppet',
