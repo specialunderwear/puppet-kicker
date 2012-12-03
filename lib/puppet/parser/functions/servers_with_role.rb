@@ -6,7 +6,7 @@ begin
     :type => :rvalue,
     :doc => "Return all server objects with a certain role:
   
-    servers_with_role('frontend', 'production)
+    servers_with_role('frontend', 'production')
     " ) do |roles|
       Puppet::Parser::Functions.autoloader.loadall
       
