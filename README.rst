@@ -92,6 +92,8 @@ facts.
     servers_with_facts('hostname=/^new$|^old$/') // returns servers with hostname either new or old
 
     servers_with_facts('uptime>10', 'hostname=/lala/') // returns servers with uptime over 10 and hostname matches lala
+- server_with_role: Return one server object with a certain role:
+    server_with_role('haproxy', { hostname => 'localhost', ipaddress => '127.0.0.1'}) // returns one haproxy server, or localhost server if nothing found.
 
 .. _cloudstack:
 
