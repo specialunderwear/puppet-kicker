@@ -16,7 +16,7 @@ begin
           fallback = args.pop
       end
 
-      servers = servers_with_role(args)
+      servers = function_servers_with_role(args)
       servers.count ? servers[0] : fallback
     end
   end
