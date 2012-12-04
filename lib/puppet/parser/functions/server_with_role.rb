@@ -17,7 +17,7 @@ begin
       end
 
       servers = function_servers_with_role(args)
-      servers.count ? servers[0] : fallback
+      servers.count > 0 ? servers[0] : fallback
     end
   end
 
