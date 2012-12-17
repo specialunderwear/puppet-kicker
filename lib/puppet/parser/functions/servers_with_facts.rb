@@ -26,7 +26,7 @@ begin
             log "found server #{result[:body][:data][:facts]['fqdn']}"
         end
 
-        return results
+        return results.sort {|first, second| first['fqdn'] <=> second['fqdn']}
       rescue Exception => e 
         log "an error occurred while querying for nodes #{e.message}"
         []
