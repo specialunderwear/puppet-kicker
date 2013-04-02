@@ -5,7 +5,7 @@
 class kicker {
     case $::operatingsystem {
         'Debian', 'Ubuntu': {
-            $ruby_lib_path = "/usr/lib/ruby/1.8"
+            $ruby_lib_path = "/usr/lib/ruby/vendor_ruby"
         }
         'CentOS','Fedora': {
             $ruby_lib_path = "/usr/lib/ruby/site_ruby/1.8"
